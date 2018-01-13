@@ -152,7 +152,7 @@ Array.prototype.last() is a method which simply returns the last item from an Ar
 
 ##### Cons
 
- - Slippery slope to add more methods, `first()`, `second()`, `fourty_two()`
+ - Slippery slope to add more methods, `first()`, `second()`, [`fourty_two()`](http://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html#method-i-forty_two)
  - Slippery slope for adding arguments (e.g. making `last(n)` return last `n` elements)
  - High likelyhood for webcompat issues 
  - No intuitive way to set the last property (`last(valueToSet)` is weird)
