@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Getting Last Array Element</title>
+
+		<link rel="stylesheet" type="text/css" href="css/reveal.css">
+		<link rel="stylesheet" type="text/css" href="css/github.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" type="application/javascript" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+        <section>
+          <h1>Last item from Arrays</h1>
+        </section>
+
+        <section>
+          <h2>Common Footguns</h2>
+          <pre>
+            <code class="hljs javascript">
+// Just calling `myArray.length` always gets `undefined`
+myArray[myArray.length] 
+
+// Overcooking indexes to be too far:
+myIndex = myArray.length  - 1
+myArray[myIndex - 1] // returns last but one, not last
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h2>Solution 1: Array#-1</h2>
+          <pre>
+            <code class="hljs javascript">
+myArray[-1] === myArray[myArray.length - 1]
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h2>Solution 1: Array#-1 Pros</h2>
+          <ul>
+            <li>Concise syntax</li>
+            <li>Can be a getter/setter, still intuitive</li>
+            <li>Behaves like normal property access</li>
+            <li>Precedent from other languages, see: Python</li>
+            <li>Could extend being a right-hand lookup op, i.e. -2, -3 etc.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Solution 1: Array#-1 Cons</h2>
+          <ul>
+            <li>Computed property access is still a footgun</li>
+            <li>Can accidentally hit this property with off-by-one-errors</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Solution 2: Array#:-1</h2>
+          <pre>
+            <code class="hljs javascript">
+myArray[:-1] === myArray[myArray.length - 1]
+
+// Maybe?
+myArray[:-2] === myArray[myArray.length -2]
+myArray[:-6] === myArray[myArray.length -6]
+myArray[1:-1] === myArray.slice(1, -1)
+myArray[2:3] === myArray.slice(2, 3)
+myArray[-1:1] === myArray.slice(1, -1).reverse()
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h2>Solution 2: Array#:-1 Pros</h2>
+          <ul>
+            <li>Segues into range access; slicing of Arrays: [2:-2], [2:-0] etc.</li>
+            <li>Could also segue to immutable reverse: [-0:0], [-3, 3] etc.</li>
+            <li>Similar precedent from other languages, see: Ruby (a[2, -2], a[-3, 3])</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Solution 2: Array#:-1 Cons</h2>
+          <ul>
+            <li>New syntax</li>
+            <li>Hard to spec</li>
+            <li>Impossible to polyfill (could be ponyfilled with Proxies with string based indexing)</li>
+            <li>Computed property access is still a footgun</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Solution 3: Array#last()</h2>
+          <pre>
+            <code class="hljs javascript">
+myArray.last() === myArray[myArray.length - 1]
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h2>Solution 3: Array#last() Pros</h2>
+          <ul>
+            <li>Very simple to spec (could go to stage 2 today)</li>
+            <li>Hard to mistakenly do, as opposed to negative indexes</li>
+            <li>Behaves like normal property access</li>
+            <li>Precedent from other languages, see: Ruby(ish), LINQ, PHP (end())</li>
+            <li>Marries well with lastIndexOf</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Solution 3: Array#last() Cons</h2>
+          <ul>
+            <li>Slippery slope to add more methods, first(), second(), fourty_two()</li>
+            <li>Slippery slope for adding arguments (e.g. making last(n) return last n elements)</li>
+            <li>High likelyhood for webcompat issues</li>
+            <li>No intuitive way to set the last property (last(valueToSet) is weird)</li>
+          </ul>
+        </section>
+
+
+        <section>
+          <h2>Questions?</h2>
+        </section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
