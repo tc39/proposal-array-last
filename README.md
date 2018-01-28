@@ -18,29 +18,24 @@ myArray[myIndex - 1] // oops, overcooked index, returns last-but-one not last, s
 
 There exist a few options for getting the last element from an Array:
 
-### Make `-1` a meta index to retrieve the last property
+### Using a getter/setter
 
 #### High Level Semantics
 
-Array.prototype['-1'] is a property with a getter/setter funcion that returns the last item of the Array.
+Array.prototype['last'] is a property with a getter/setter funcion that returns the last item of the Array.
 
 ##### Pros
 
- - Is a short syntax
  - Has the option for easy setting, while remaining intuitive
- - Behaves like normal property access - like expected
- - Precedent from other languages, see: Python
- - Could extend to negative numbers becoming a right-hand lookup, i.e. `-2`, `-3` etc.
 
 ##### Cons
 
- - Computed property access is still a footgun
- - Can accidentally hit this property with off-by-one-errors (`index = 0; myArray[index - 1] will accidentally get last item instead of undefined`)
+ - WebCompat issues - especially if `last` is picked as name.
 
 #### Specification
 
 ```
-22.1.3.xx Array.prototype['-1']
+22.1.3.xx Array.prototype['last']
 
 It is a property where the attributes are { [[Enumerable]]: false, [[Configurable]]: false, [[Get]]: GetLastArrayItem, [[Set]]: SetLastArrayItem }.
 
@@ -66,12 +61,10 @@ When the SetLastArrayItem method is called, the following steps are taken:
 
     Let O be ? ToObject(this value).
     Let len be ? ToLength(? Get(O, "length")).
-    If len is zero, then
-        Return false.
-    Else len > 0,
-        Let newLen be len-1.
-        Let index be ! ToString(newLen).
-        Return ? Set(O, index, value).
+    If len is zeo, then
+        Set len to len-1
+    Let index be ! ToString(len).
+    Return ? Set(O, index, value).
 
 Note 1
 
@@ -83,12 +76,12 @@ The SetLastArrayItem function is intentionally generic; it does not require that
 
 ```js
 // This polyfill tries to stick as close to the spec as possible. There are polyfills which could use less code.
-Object.defineProperty(Array.prototype, '-1', {
+Object.defineProperty(Array.prototype, 'last', {
   enumerable: false,
   configurable: false,
   get() {
     let O = Object(this)
-    let len = Math.min(Math.min(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
+    let len = Math.min(Math.max(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
     if (len === 0) {
       return undefined
     } else if (len > 0) {
@@ -100,43 +93,15 @@ Object.defineProperty(Array.prototype, '-1', {
   },
   set(value) {
     let O = Object(this)
-    let len = Math.min(Math.min(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
-    if (len === 0) {
-      return undefined
-    } else if (len > 0) {
-      let newLen = len -1
-      let index = String(newLen)
-      return O[index] = value
+    let len = Math.min(Math.max(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
+    if (len > 0) {
+      len = len -1
     }
+    let index = String(newLen)
+    return O[index] = value
   },
 })
 ```
-
-### Make `[:-1]` a meta syntax to retrieve the last property
-
-#### High Level Semantics
-
-Using a supposed "range access sigil", combined with a right-hand-index lookup, to return 
-
-##### Pros
-
- - Segues nicely into adding range access to JS, for handy slicing of Arrays: `[2:-2]`, `[2:-0]` etc.
- - Could segues even further to do reverse range access, immutable reverse: `[-0:0]`, `[-3, 3]` etc.
- - Similar precedent from other languages, see: Ruby (`a[2, -2]`, `a[-3, 3]`)
-
-##### Cons
-
- - Hard to spec
- - Impossible to polyfill (could be ponyfilled with Proxies with string based indexing)
- - Computed property access is still a footgun
-
-#### Specification
-
-TBD.
-
-#### Polyfill
-
-Unlikely
 
 ### Array.prototype.last()
 
@@ -146,17 +111,10 @@ Array.prototype.last() is a method which simply returns the last item from an Ar
 
 ##### Pros
 
- - Very simple to spec
- - Hard to mistakenly do, as opposed to negative indexes
- - Behaves like normal property access - like expected
- - Precedent from other languages, see: Ruby(ish), LINQ, PHP (`end()`)
- - Marries well with `lastIndexOf`
+ - Good chances of no WebCompat issues
 
 ##### Cons
-
- - Slippery slope to add more methods, `first()`, `second()`, [`fourty_two()`](http://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html#method-i-forty_two)
- - Slippery slope for adding arguments (e.g. making `last(n)` return last `n` elements)
- - High likelyhood for webcompat issues 
+ 
  - No intuitive way to set the last property (`last(valueToSet)` is weird)
 
 ### Specification
@@ -189,7 +147,7 @@ The last function is intentionally generic; it does not require that its this va
 // This polyfill tries to stick as close to the spec as possible. There are polyfills which could use less code.
 Array.prototype.last = function last() {
   let O = Object(this)
-  let len = Math.min(Math.min(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
+  let len = Math.min(Math.max(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
   if (len === 0) {
     return undefined
   } else if (len > 0) {
