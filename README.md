@@ -47,7 +47,7 @@ When the SetLastArrayItem method is called, the following steps are taken:
 
     Let O be ? ToObject(this value).
     Let len be ? ToLength(? Get(O, "length")).
-    If len is not zero, then
+    If len > 0, then
         Set len to len-1
     Let index be ! ToString(len).
     Return ? Set(O, index, value).
