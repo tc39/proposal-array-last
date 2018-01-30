@@ -16,7 +16,7 @@ myArray[myIndex - 1] // oops, overcooked index, returns last-but-one not last, s
 
 ## High Level Proposal
 
-Array.prototype['end'] is a property with a getter/setter funcion that returns the last item of the Array.
+Array.prototype['end'] is a property with a getter/setter function that returns the last item of the Array.
 
 ## Specification
 
