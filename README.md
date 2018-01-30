@@ -80,9 +80,7 @@ Object.defineProperty(Array.prototype, 'end', {
   set(value) {
     let O = Object(this)
     let len = Math.min(Math.max(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
-    if (len > 0) {
-      len = len -1
-    }
+    let newLen = len > 0 ? len -1 : len
     let index = String(newLen)
     return O[index] = value
   },
