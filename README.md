@@ -34,8 +34,8 @@ When the GetLastArrayItem method is called, the following steps are taken:
     If len is zero, then
         Return undefined.
     Else len > 0,
-        Let newLen be len-1.
-        Let index be ! ToString(newLen).
+        Set len to len-1.
+        Let index be ! ToString(len).
         Let element be ? Get(O, index).
         Return element. 
 
@@ -48,7 +48,7 @@ When the SetLastArrayItem method is called, the following steps are taken:
     Let O be ? ToObject(this value).
     Let len be ? ToLength(? Get(O, "length")).
     If len > 0, then
-        Set len to len-1
+        Set len to len-1.
     Let index be ! ToString(len).
     Return ? Set(O, index, value).
 
@@ -61,29 +61,30 @@ The SetLastArrayItem function is intentionally generic; it does not require that
 
 
 ```js
+import { ToString, ToObject, ToLength } from 'es-abstract'
 // This polyfill tries to stick as close to the spec as possible. There are polyfills which could use less code.
 Object.defineProperty(Array.prototype, 'end', {
   enumerable: false,
   configurable: false,
   get() {
-    let O = Object(this)
-    let len = Math.min(Math.max(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
+    let O = ToObject(this)
+    let len = ToLength(O.length)
     if (len === 0) {
       return undefined
     } else if (len > 0) {
-      let newLen = len -1
-      let index = String(newLen)
+      len = len -1
+      let index = ToString(len)
       let element = O[index]
       return element
     }
   },
   set(value) {
-    let O = Object(this)
-    let len = Math.min(Math.max(0, Math.floor(Math.abs(O.length))), Number.MAX_SAFE_INTEGER)
+    let O = ToObject(this)
+    let len = ToLength(O.length)
     if (len > 0) {
       len = len -1
     }
-    let index = String(newLen)
+    let index = ToString(len)
     return O[index] = value
   },
 })
