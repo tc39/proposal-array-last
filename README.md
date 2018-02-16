@@ -4,7 +4,7 @@
 
 Currently the only way to get the last element of an Array is to subtract one from the `.length` property and use this value in the property lookup. Typically this looks like `someArray[someArray.length - 1]`.
 
-For such a common operation, it is easy to forget to `-1` from the `length` property, or to overcook it, and as such there should be a simpler syntax for doing this.
+For such a common operation, it is easy to forget to `-1` from the `length` property, or to overlook it, and as such there should be a simpler syntax for doing this.
 
 ```js
 myArray[myArray.length] // oops, index out of bounds, return `undefined`, scratch head for hours from silly mistake
