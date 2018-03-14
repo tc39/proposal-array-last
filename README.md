@@ -94,4 +94,10 @@ Object.defineProperty(Array.prototype, 'end', {
 
  - `Array.prototype.end()` as a method. The downside being that setting the last element of an array is still uses awkward syntax.
  - `Array.prototype.peek()` was considered (marries well with `push`, `pop`) but `peek` as a setter is unintuitive.
+ - `Array.prototype.prePop()` [was mentioned](https://github.com/keithamus/proposal-array-last/issues/11#issuecomment-372933559) but suffers from the same issues as `peek` - it is unintuitive for setting, and potentially surprising if it _doesn't_ mutate. 
  - `Array.prototype.last`/`Array.prototype.last()` was originally proposed but has web-compatibility issues.
+ - [A bunch of other names](https://github.com/keithamus/proposal-array-last/issues/11#issuecomment-362246040). Most importantly see the following rational for a naming rubric:
+   - Not have webcompat issues
+   - Within the top 1000 most popular english words (both last and end are)
+   - Should be intuitive for both getting and setting
+   - Ideally not be a compound word (like lastItem)
