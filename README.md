@@ -16,12 +16,12 @@ myArray[myIndex - 1] // oops, overcooked index, returns last-but-one not last, s
 
 ## High Level Proposal
 
-Array.prototype['end'] is a property with a getter/setter function that returns the last item of the Array.
+Array.prototype['lastItem'] is a property with a getter/setter function that returns the last item of the Array.
 
 ## Specification
 
 ```
-22.1.3.xx Array.prototype['end']
+22.1.3.xx Array.prototype['lastItem']
 
 It is a property where the attributes are { [[Enumerable]]: false, [[Configurable]]: false, [[Get]]: GetLastArrayItem, [[Set]]: SetLastArrayItem }.
 
@@ -55,6 +55,24 @@ When the SetLastArrayItem method is called, the following steps are taken:
 Note 1
 
 The SetLastArrayItem function is intentionally generic; it does not require that its this value be an Array object. Therefore it can be transferred to other kinds of objects for use as a method.
+
+22.1.3.xx Array.prototype['lastIndex']
+
+It is a property where the attributes are { [[Enumerable]]: false, [[Configurable]]: false, [[Get]]: GetLastArrayIndex }.
+
+22.1.3.xx GetLastArrayIndex 
+
+When the GetLastArrayIndex method is called, the following steps are taken:
+
+    Let O be ? ToObject(this value).
+    Let len be ? ToLength(? Get(O, "length")).
+    If len > 0, then
+        Return len.
+    Return 0.
+
+Note 1
+
+The GetLastArrayIndex function is intentionally generic; it does not require that its this value be an Array object. Therefore it can be transferred to other kinds of objects for use as a method.
 ```
 
 ## Polyfill
@@ -63,7 +81,7 @@ The SetLastArrayItem function is intentionally generic; it does not require that
 ```js
 import { ToString, ToObject, ToLength } from 'es-abstract'
 // This polyfill tries to stick as close to the spec as possible. There are polyfills which could use less code.
-Object.defineProperty(Array.prototype, 'end', {
+Object.defineProperty(Array.prototype, 'lastItem', {
   enumerable: false,
   configurable: false,
   get() {
@@ -88,14 +106,27 @@ Object.defineProperty(Array.prototype, 'end', {
     return O[index] = value
   },
 })
+Object.defineProperty(Array.prototype, 'lastIndex', {
+  enumerable: false,
+  configurable: false,
+  get() {
+    let O = ToObject(this)
+    let len = ToLength(O.length)
+    if (len > 0) {
+      return len
+    }
+    return 0
+  },
+})
 ```
 
 #### Other considered options
 
+ - `Array.prototype.last`/`Array.prototype.last()` was originally proposed but has web-compatibility issues.
  - `Array.prototype.end()` as a method. The downside being that setting the last element of an array is still uses awkward syntax.
+ - `Array.prototype.end` as a getter. However `lastItem` was a more popular name choice.
  - `Array.prototype.peek()` was considered (marries well with `push`, `pop`) but `peek` as a setter is unintuitive.
  - `Array.prototype.prePop()` [was mentioned](https://github.com/keithamus/proposal-array-last/issues/11#issuecomment-372933559) but suffers from the same issues as `peek` - it is unintuitive for setting, and potentially surprising if it _doesn't_ mutate. 
- - `Array.prototype.last`/`Array.prototype.last()` was originally proposed but has web-compatibility issues.
  - [A bunch of other names](https://github.com/keithamus/proposal-array-last/issues/11#issuecomment-362246040). Most importantly see the following rational for a naming rubric:
    - Not have webcompat issues
    - Within the top 1000 most popular english words (both last and end are)
