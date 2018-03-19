@@ -67,7 +67,7 @@ When the GetLastArrayIndex method is called, the following steps are taken:
     Let O be ? ToObject(this value).
     Let len be ? ToLength(? Get(O, "length")).
     If len > 0, then
-        Return len.
+        Return len-1.
     Return 0.
 
 Note 1
@@ -113,7 +113,7 @@ Object.defineProperty(Array.prototype, 'lastIndex', {
     let O = ToObject(this)
     let len = ToLength(O.length)
     if (len > 0) {
-      return len
+      return len - 1
     }
     return 0
   },
