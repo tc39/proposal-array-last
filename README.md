@@ -16,12 +16,13 @@ myArray[myIndex - 1] // oops, overcooked index, returns last-but-one not last, s
 
 ## High Level Proposal
 
-Array.prototype['lastItem'] is a property with a getter/setter function that returns the last item of the Array.
+Array.prototype.lastItem is a property with a getter/setter function that returns the last item of the Array.
+Array.prototype.lastIndex is a property with a getter function that returns the last index of the Array.
 
 ## Specification
 
 ```
-22.1.3.xx Array.prototype['lastItem']
+22.1.3.xx Array.prototype.lastItem
 
 It is a property where the attributes are { [[Enumerable]]: false, [[Configurable]]: false, [[Get]]: GetLastArrayItem, [[Set]]: SetLastArrayItem }.
 
@@ -56,7 +57,7 @@ Note 1
 
 The SetLastArrayItem function is intentionally generic; it does not require that its this value be an Array object. Therefore it can be transferred to other kinds of objects for use as a method.
 
-22.1.3.xx Array.prototype['lastIndex']
+22.1.3.xx Array.prototype.lastIndex
 
 It is a property where the attributes are { [[Enumerable]]: false, [[Configurable]]: false, [[Get]]: GetLastArrayIndex }.
 
