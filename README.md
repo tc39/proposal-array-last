@@ -1,5 +1,7 @@
 # Getting last item from Array
 
+[(Currently Stage 1)](https://github.com/tc39/proposals/blob/master/stage-1-proposals.md)
+
 ## Rationale
 
 Currently the only way to get the last element of an Array is to subtract one from the `.length` property and use this value in the property lookup. Typically this looks like `someArray[someArray.length - 1]`.
