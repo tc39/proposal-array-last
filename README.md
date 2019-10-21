@@ -80,7 +80,9 @@ The GetLastArrayIndex function is intentionally generic; it does not require tha
 
 ## Polyfill
 
+A polyfill is available in the [core-js](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#getting-last-item-from-array).
 
+It's a polyfill with usage abstract ECMAScript operations:
 ```js
 import { ToString, ToObject, ToLength } from 'es-abstract'
 // This polyfill tries to stick as close to the spec as possible. There are polyfills which could use less code.
