@@ -2,6 +2,8 @@
 
 [(Currently Stage 1)](https://github.com/tc39/proposals/blob/master/stage-1-proposals.md)
 
+This proposal's champion (@keithamus) does not plan to advance to Stage 2 for now. Other proposals ([Array.prototype.item](https://github.com/tabatkins/proposal-item-method) and [Array Slice Notation](https://github.com/tc39/proposal-slice-notation)) also sufficiently solve this problem, and are advancing quicker through the standards track. Should one of these proposals advance to Stage 3, this proposal will be dropped.
+
 ## Rationale
 
 Currently the only way to get the last element of an Array is to subtract one from the `.length` property and use this value in the property lookup. Typically this looks like `someArray[someArray.length - 1]`.
