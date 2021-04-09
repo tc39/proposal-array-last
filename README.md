@@ -1,5 +1,7 @@
 # Getting last item from Array
 
+![Stage 3](https://badges.aleen42.com/src/tc39_4.svg)
+
 [(Currently Stage 1)](https://github.com/tc39/proposals/blob/master/stage-1-proposals.md)
 
 This proposal's champion (@keithamus) does not plan to advance to Stage 2 for now. Other proposals ([Array.prototype.item](https://github.com/tabatkins/proposal-item-method) and [Array Slice Notation](https://github.com/tc39/proposal-slice-notation)) also sufficiently solve this problem, and are advancing quicker through the standards track. Should one of these proposals advance to Stage 3, this proposal will be dropped.
